@@ -1,37 +1,74 @@
 package com.example.myapplication
 
-import android.app.PendingIntent.getActivity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.chat.adapters.ChatAdapter
 import com.example.myapplication.database.RealtimeDatabase
-import com.example.myapplication.firebasefunctions.Functions
+import com.example.myapplication.models.CurrentUser
+import com.example.myapplication.models.Message
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    val chatAdapter = ChatAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getFirebaseInstanceId()
+        val currUser = CurrentUser(1, emptyList())
 
-        sendUpstream()
+        val messagesList = mutableListOf(
+            Message("aaaa", 1),
+            Message("bbb", 2),
+            Message("ccc", 1)
+        )
+
+        messageListRecycler.layoutManager = LinearLayoutManager(this)
+
+        chatAdapter.items = messagesList
+        messageListRecycler.adapter = chatAdapter
 
         val database = RealtimeDatabase()
 
-        database.setListener()
+        sendBtn.isEnabled = false
 
-        database.setValue("val from main")
+        editText.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                sendBtn.isEnabled = s.toString().trim().isNotEmpty()
+            }
+        })
+
+        sendBtn.setOnClickListener {
+            msgId += 1
+            val text = editText.text.toString()
+            database.pushValue(text, msgId)
+//            chatAdapter.add(listOf(Message(text, 1)))
+        }
+
+        database.setListener()
+        database.setChildEventListener(this)
+        database.setValue(editText.text.toString())
     }
 
     override fun onStart() {
@@ -60,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
             // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
-            Log.d("Main Activity", msg)
+            Log.d(TAG, msg)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
 
@@ -78,8 +115,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendUpstream() {
         val fm = FirebaseMessaging.getInstance()
-
-        msgId += 1
 
         fm.send(RemoteMessage.Builder("\"$SENDER_ID@fcm.googleapis.com\"")
             .setMessageId(msgId.inc().toString())
