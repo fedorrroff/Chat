@@ -1,9 +1,10 @@
 package com.example.myapplication.database
 
 import android.util.Log
-import android.view.textclassifier.ConversationActions
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.MainActivity
+import androidx.fragment.app.Fragment
+import com.example.myapplication.ChatActivity
+import com.example.myapplication.chat.ChatFragment
 import com.example.myapplication.models.Message
 import com.google.firebase.database.*
 
@@ -19,11 +20,11 @@ class RealtimeDatabase {
 
     }
 
-    fun setChildEventListener(listener: AppCompatActivity) {
+    fun setChildEventListener(listener: Fragment) {
         firebaseDatabase.getReference("message").addChildEventListener(object : ChildEventListener {
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {
                 Log.d(TAG, "Data changed: ${p1}")
-                (listener as MainActivity).chatAdapter.add(listOf(Message(p0.children.lastOrNull()?.value.toString(), 2)))
+                (listener as ChatFragment).chatAdapter.add(listOf(Message(p0.children.lastOrNull()?.value.toString(), listener.getAuthorizedUser())))
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {

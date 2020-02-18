@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.models.CurrentUser
 import com.example.myapplication.models.Message
+import com.google.firebase.auth.FirebaseAuth
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 
 class ReceivedMessageAdapterDelegate :
@@ -20,7 +22,7 @@ class ReceivedMessageAdapterDelegate :
         return ReceivedMessageViewHolder(itemView)
     }
 
-    override fun isForViewType(item: Message, items: MutableList<Message>, position: Int): Boolean = item.sender == 1
+    override fun isForViewType(item: Message, items: MutableList<Message>, position: Int): Boolean = item.sender == FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onBindViewHolder(
         item: Message,
