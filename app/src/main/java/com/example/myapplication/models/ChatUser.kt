@@ -1,6 +1,6 @@
 package com.example.myapplication.models
 
 data class ChatUser(
-    val id: Int
+    val id: String
 ) {
 }

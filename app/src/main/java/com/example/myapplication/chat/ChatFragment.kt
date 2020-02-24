@@ -1,92 +1,93 @@
 package com.example.myapplication.chat
 
+import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import android.view.*
+import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.ChatActivity
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.chat.adapters.ChatAdapter
+import com.example.myapplication.chat.adapters.MarginItemDecoration
+import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.database.RealtimeDatabase
-import com.example.myapplication.models.Message
-import com.example.myapplication.navigation.INavigation
-import com.example.myapplication.navigation.Navigation
+import com.example.myapplication.databinding.ChatFragmentBinding
+import com.example.myapplication.models.Chat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.chat_fragment.*
+import javax.inject.Inject
 
-class ChatFragment: Fragment() {
+class ChatFragment: BaseFragment() {
+
+    @Inject
+    lateinit var vmFactory: ViewModelProvider.Factory
+    private val viewModel: ChatViewModel by lazy {
+        ViewModelProvider(this, vmFactory).get(ChatViewModel::class.java)
+    }
 
     val chatAdapter = ChatAdapter()
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var navigator: INavigation
+    private lateinit var binding: ChatFragmentBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getMainComponent().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.chat_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.chat_fragment, container, false)
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        viewModel.bind(this)
+
+        setUpMessageList()
+
+        return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.setActionBar(toolbar)
+        activity?.actionBar?.title = "dewwe"
+
         super.onViewCreated(view, savedInstanceState)
+    }
 
-        navigator = Navigation(activity as AppCompatActivity)
-//        val currUser = CurrentUser(1, emptyList())
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu, menu)
+    }
 
-        val messagesList = mutableListOf(
-            Message("aaaa", "1"),
-            Message("bbb", "2"),
-            Message("ccc", "2")
-        )
-
-        messageListRecycler.layoutManager = LinearLayoutManager(activity)
-
-        chatAdapter.items = messagesList
-        messageListRecycler.adapter = chatAdapter
-
-        val database = RealtimeDatabase()
-
-        sendBtn.isEnabled = false
-
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                sendBtn.isEnabled = s.toString().trim().isNotEmpty()
-            }
-        })
-
-        sendBtn.setOnClickListener {
-            ChatActivity.msgId += 1
-            val text = editText.text.toString()
-            database.pushValue(text, ChatActivity.msgId)
-//            chatAdapter.add(listOf(Message(text, 1)))
+    private fun setUpMessageList() {
+        binding.messageListRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.messageListRecycler.adapter = ChatAdapter().apply {
+            viewModel.messages.observe(viewLifecycleOwner, Observer {
+                it?.let{ this.items = it }
+            })
         }
-
-        signOutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            navigator.showLoginScreen()
-        }
-
-        database.setListener()
-        database.setChildEventListener(this)
-        database.setValue(editText.text.toString())
+        binding.messageListRecycler.addItemDecoration(MarginItemDecoration(
+            resources.getDimension(R.dimen.default_padding).toInt()
+        ))
     }
 
     fun getAuthorizedUser() = FirebaseAuth.getInstance().currentUser?.uid
 
     companion object {
-        fun newInstance() = ChatFragment()
+
+        const val TAG = "ChatFragment"
+
+        fun newInstance(item: Chat): ChatFragment {
+            val fragment = ChatFragment()
+            fragment.arguments = Bundle().apply { putSerializable(TAG, item) }
+            return fragment
+        }
     }
 }

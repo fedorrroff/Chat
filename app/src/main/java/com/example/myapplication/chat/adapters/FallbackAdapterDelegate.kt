@@ -32,7 +32,7 @@ class FallbackAdapterDelegate : AbsFallbackAdapterDelegate<MutableList<Message>>
         return FallbackViewHolder(itemView)
     }
 
-    class FallbackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class FallbackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var messageTextView: TextView? = null
 
         init {

@@ -7,16 +7,20 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
+import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
-class SplashFragment: Fragment() {
+class SplashFragment: BaseFragment() {
 
-    private lateinit var navigator: INavigation
+    @Inject
+    lateinit var navigator: Navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getMainComponent().inject(this)
     }
 
     override fun onCreateView(
@@ -29,14 +33,11 @@ class SplashFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        navigator = Navigation(activity as AppCompatActivity)
-
         view.postDelayed( {
             if (!isUserAutorized()) {
                 navigator.showLoginScreen()
             } else {
-                navigator.showChatScreen()
+                navigator.showMyChatsScreen()
             }
         }, 2000)
     }

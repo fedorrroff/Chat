@@ -1,6 +1,6 @@
 package com.example.myapplication.models
 
 data class CurrentUser (
-    val id: String?,
-    val chats: List<Chat>
+    val id: String? = "",
+    val chats: List<String> = emptyList()
 )

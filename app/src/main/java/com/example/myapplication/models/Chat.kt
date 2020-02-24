@@ -1,8 +1,10 @@
 package com.example.myapplication.models
 
+import java.io.Serializable
+
 data class Chat(
-    val mesages: List<Message>,
-    val users: List<Int>,
-    val sentTo: Int
-) {
+    val chatId: String = "",
+    val messages: MutableList<Message> = mutableListOf(),
+    val users: List<String> = emptyList()
+) : Serializable {
 }

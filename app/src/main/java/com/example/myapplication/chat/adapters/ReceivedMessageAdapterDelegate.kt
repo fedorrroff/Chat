@@ -32,7 +32,7 @@ class ReceivedMessageAdapterDelegate :
         holder.messageTextView?.text = item.message
     }
 
-     class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var messageTextView: TextView? = null
 
         init {

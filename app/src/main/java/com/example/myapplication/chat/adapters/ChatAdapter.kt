@@ -12,11 +12,6 @@ class ChatAdapter : ListDelegationAdapter<MutableList<Message>> {
 
     private lateinit var currentUser: CurrentUser
 
-    constructor(currentUser: CurrentUser): super() {
-        this.currentUser = currentUser
-    }
-
-
     init {
         items = mutableListOf()
         delegatesManager.addDelegate(ReceivedMessageAdapterDelegate())
