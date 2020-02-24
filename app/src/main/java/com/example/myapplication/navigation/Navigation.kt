@@ -6,6 +6,9 @@ import androidx.fragment.app.FragmentManager
 import com.example.myapplication.R
 import com.example.myapplication.chat.ChatFragment
 import com.example.myapplication.login.LoginFragment
+import com.example.myapplication.models.Chat
+import com.example.myapplication.mychats.MyChatsAdapter
+import com.example.myapplication.mychats.MyChatsFragment
 import com.example.myapplication.signup.SignUpFragment
 import com.example.myapplication.splash.SplashFragment
 
@@ -21,12 +24,16 @@ class Navigation(activity: AppCompatActivity) : INavigation {
         showFragmentMain(LoginFragment.newInstance())
     }
 
-    override fun showChatScreen() {
-        showFragmentMain(ChatFragment.newInstance())
+    override fun showChatScreen(item: Chat) {
+        showFragment(ChatFragment.newInstance(item))
     }
 
     override fun showSignUpScreen() {
         showFragment(SignUpFragment.newInstance())
+    }
+
+    override fun showMyChatsScreen() {
+        showFragmentMain(MyChatsFragment.newInstance())
     }
 
     private fun showFragment(fragment: Fragment) {

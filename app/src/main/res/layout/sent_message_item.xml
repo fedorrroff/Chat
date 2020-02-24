@@ -8,13 +8,14 @@
 
     <TextView
         android:id="@+id/messageSentTextView"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/outer_message"
         tools:text="dewew" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

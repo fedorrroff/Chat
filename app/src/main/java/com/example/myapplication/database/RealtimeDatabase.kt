@@ -1,9 +1,7 @@
 package com.example.myapplication.database
 
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.myapplication.ChatActivity
 import com.example.myapplication.chat.ChatFragment
 import com.example.myapplication.models.Message
 import com.google.firebase.database.*
@@ -13,11 +11,14 @@ class RealtimeDatabase {
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val databaseReference = firebaseDatabase.getReference("message")
 
+    fun setReference() {
+
+    }
+
     fun setValue(value: String = "Default value") {
         databaseReference
             .child("newchild")
             .setValue("suka")
-
     }
 
     fun setChildEventListener(listener: Fragment) {
@@ -56,10 +57,6 @@ class RealtimeDatabase {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
-    }
-
-    fun setChildUpdateListener() {
-
     }
 
     fun pushValue(value: String, child: Int) {
