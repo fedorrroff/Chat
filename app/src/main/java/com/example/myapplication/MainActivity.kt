@@ -1,35 +1,25 @@
 package com.example.myapplication
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.view.Menu
-import android.widget.Toast
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.chat.adapters.ChatAdapter
-import com.example.myapplication.database.RealtimeDatabase
+import android.view.View
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.Toolbar
 import com.example.myapplication.di.MainComponentHolder
-import com.example.myapplication.models.CurrentUser
-import com.example.myapplication.models.Message
 import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
-import com.example.myapplication.splash.SplashFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
+import com.example.myapplication.toolbar.IMenuDelegate
+import com.example.myapplication.toolbar.IToolbarHolder
+import com.example.myapplication.toolbar.IToolbarProvider
 import kotlinx.android.synthetic.main.activity_chat.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IToolbarHolder {
 
     private val navigator: INavigation = Navigation(this)
+
+    @Inject
+    lateinit var menuDelegate: IMenuDelegate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,24 +33,64 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFirebaseInstanceId() = FirebaseInstanceId.getInstance().instanceId
-        .addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Main Activity", "getInstanceId failed", task.exception)
-                return@OnCompleteListener
-            }
+    override fun useCustomToolbar(toolbar: Toolbar?) {
+        appBarLayout?.visibility = View.GONE
 
-            // Get new Instance ID token
-            val token = task.result?.token
+        fragment_container.setPadding(0, 0, 0, 0)
+        menuDelegate.useCustomToolbar(toolbar)
+        invalidateToolbarTitles()
+    }
 
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
+    override fun useBaseToolbar(navigationIcon: Int?) {
+        appBarLayout.visibility = View.VISIBLE
+
+        menuDelegate.useBaseToolbar(navigationIcon)
+        fragment_container.setPadding(0, 0, 0, 0)
+        invalidateToolbarTitles()
+    }
+
+    override fun invalidateToolbarTitles() {
+        invalidateToolbarTitle()
+        invalidateToolbarSubTitle()
+    }
+
+    override fun invalidateToolbarTitle() {
+        supportActionBar?.title = getToolbarProvider()?.getToolbarTitle()
+    }
+
+    override fun invalidateToolbarSubTitle() {
+        supportActionBar?.title = getToolbarProvider()?.getToolbarSubtitle()
+    }
+
+    override fun showNavigationArrow() {
+        menuDelegate.showNavigationArrow()
+    }
+
+    override fun hideNavigationArrow() {
+        menuDelegate.hideNavigationArrow()
+    }
+
+    override fun hideToolbar() {
+        appBarLayout.makeGone()
+    }
+
+    override fun showToolbar() {
+        appBarLayout.makeVisible()
+    }
+
+    override fun getSupportActionBarActivity(): ActionBar? = supportActionBar
+
+    fun View.makeGone() {
+        visibility = View.GONE
+    }
+
+    fun View.makeVisible() {
+        visibility = View.VISIBLE
+    }
+
+    private fun getToolbarProvider() = supportFragmentManager.findFragmentById(R.id.fragment_container) as? IToolbarProvider
 
     companion object {
         const val TAG = "Main Activity"
-        var msgId = 0
     }
 }

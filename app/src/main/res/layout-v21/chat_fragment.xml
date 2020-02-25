@@ -20,7 +20,7 @@
 
         <Toolbar
             android:id="@+id/toolbar"
-            android:navigationIcon="@drawable/ic_exit_to_app_black_24dp"
+            android:navigationIcon="@drawable/ic_arrow_back_black_24dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@android:color/darker_gray" />
