@@ -1,6 +1,5 @@
 package com.example.myapplication.toolbar
 
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -32,12 +31,12 @@ class MenuDelegate(private val activity: AppCompatActivity) : IMenuDelegate {
         navigationIconVisibility = false
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setToolbar(toolbar: Toolbar?, navigationIcon: Int? = null) {
         activity.apply {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(true)
 
             toolbar?.setNavigationOnClickListener {
                 onBackPressed()
@@ -45,7 +44,9 @@ class MenuDelegate(private val activity: AppCompatActivity) : IMenuDelegate {
         }
 
         if (navigationIconVisibility) {
-            toolbar?.navigationIcon = activity.getDrawable(R.drawable.ic_arrow_back_black_24dp)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                toolbar?.navigationIcon = activity.getDrawable(R.drawable.ic_arrow_back_black_24dp)
+            }
         } else {
             toolbar?.navigationIcon = null
         }

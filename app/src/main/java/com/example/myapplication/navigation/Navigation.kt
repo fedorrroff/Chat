@@ -14,6 +14,7 @@ import com.example.myapplication.splash.SplashFragment
 
 class Navigation(activity: AppCompatActivity) : INavigation {
 
+    private val CONTAINER_ID = R.id.fragment_container
     private val fragmentManager: FragmentManager = activity.supportFragmentManager
 
     override fun showSplashScreen() {
@@ -37,19 +38,17 @@ class Navigation(activity: AppCompatActivity) : INavigation {
     }
 
     private fun showFragment(fragment: Fragment) {
-        fragmentManager.beginTransaction()
+        fragmentManager
+            .beginTransaction()
             .replace(CONTAINER_ID, fragment)
-            .addToBackStack(null)
+            .addToBackStack("")
             .commit()
     }
 
     private fun showFragmentMain(fragment: Fragment) {
-        fragmentManager.beginTransaction()
+        fragmentManager
+            .beginTransaction()
             .replace(CONTAINER_ID, fragment)
             .commit()
-    }
-
-    companion object {
-        const val CONTAINER_ID = R.id.fragment_container
     }
 }

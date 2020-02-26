@@ -5,21 +5,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import com.example.myapplication.di.ActivityModule
+import com.example.myapplication.di.DaggerMainComponent
+import com.example.myapplication.di.MainComponent
 import com.example.myapplication.di.MainComponentHolder
 import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.toolbar.IMenuDelegate
 import com.example.myapplication.toolbar.IToolbarHolder
 import com.example.myapplication.toolbar.IToolbarProvider
+import com.example.myapplication.toolbar.MenuDelegate
+import com.example.myapplication.utils.makeGone
+import com.example.myapplication.utils.makeVisible
 import kotlinx.android.synthetic.main.activity_chat.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), IToolbarHolder {
 
-    private val navigator: INavigation = Navigation(this)
-
-    @Inject
-    lateinit var menuDelegate: IMenuDelegate
+    private val menuDelegate: IMenuDelegate = MenuDelegate(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +30,21 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
 
         val mainComponentHolder = MainComponentHolder.getInstance()
         mainComponentHolder.initDaggerComponent(this)
+        getMainComponent().inject(this)
+
+        menuDelegate.onCreate(savedInstanceState)
 
         if(savedInstanceState == null) {
-            navigator.showSplashScreen()
+            mainComponentHolder.getMainComponent().navigator().showSplashScreen()
         }
     }
+
+    private fun getMainComponent() :
+        MainComponent = DaggerMainComponent
+            .builder()
+            .activityModule(ActivityModule(this))
+            .build()
+
 
     override fun useCustomToolbar(toolbar: Toolbar?) {
         appBarLayout?.visibility = View.GONE
@@ -59,7 +72,7 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
     }
 
     override fun invalidateToolbarSubTitle() {
-        supportActionBar?.title = getToolbarProvider()?.getToolbarSubtitle()
+        supportActionBar?.subtitle = getToolbarProvider()?.getToolbarSubtitle()
     }
 
     override fun showNavigationArrow() {
@@ -79,14 +92,6 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
     }
 
     override fun getSupportActionBarActivity(): ActionBar? = supportActionBar
-
-    fun View.makeGone() {
-        visibility = View.GONE
-    }
-
-    fun View.makeVisible() {
-        visibility = View.VISIBLE
-    }
 
     private fun getToolbarProvider() = supportFragmentManager.findFragmentById(R.id.fragment_container) as? IToolbarProvider
 

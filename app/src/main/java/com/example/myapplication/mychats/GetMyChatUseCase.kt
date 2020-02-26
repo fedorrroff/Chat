@@ -17,7 +17,7 @@ class GetMyChatUseCase @Inject constructor()  {
 
     fun setChat() {
         val ref = firebaseDatabase.getReference("users").child(currentUser?.uid!!)
-        val user = CurrentUser(currentUser.uid, listOf("testid"))
+        val user = CurrentUser(currentUser.uid, "dddd", listOf("testid"))
         ref.setValue(user)
     }
 

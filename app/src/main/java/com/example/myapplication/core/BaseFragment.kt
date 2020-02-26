@@ -2,10 +2,14 @@ package com.example.myapplication.core
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.R
 import com.example.myapplication.di.ActivityModule
 import com.example.myapplication.di.DaggerMainComponent
 import com.example.myapplication.di.MainComponent
@@ -21,6 +25,11 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
                                                         .activityModule(ActivityModule(requireActivity() as AppCompatActivity))
                                                         .build()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(enableOptionsMenu())
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarHolder = context as IToolbarHolder
@@ -33,7 +42,29 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
             toolbarHolder.hideNavigationArrow()
         }
 
-        initToolbar()
+        when(getFragmentType()) {
+            FragmentType.MENU_FRAMENT -> {
+                initToolbar()
+            }
+            FragmentType.NO_MENUFRAGMENT -> {
+
+            }
+            else -> {
+                initToolbar()
+            }
+        }
+
+    }
+
+    open fun enableOptionsMenu() = true
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return true
     }
 
     fun initToolbar() {
@@ -44,9 +75,15 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
         }
     }
 
+    override fun getToolbarTitle(): CharSequence = ""
+
+    override fun getToolbarSubtitle(): CharSequence? = null
+
     open fun showNavigationArrow(): Boolean = true
 
     open fun provideCustomToolbar(): Toolbar? = null
 
     open fun provideNavigationIcon(): Int? = null
+
+    open fun getFragmentType() = FragmentType.MENU_FRAMENT
 }
