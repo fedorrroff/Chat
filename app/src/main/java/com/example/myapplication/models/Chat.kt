@@ -6,5 +6,4 @@ data class Chat(
     val chatId: String = "",
     val messages: MutableList<Message> = mutableListOf(),
     val users: List<String> = emptyList()
-) : Serializable {
-}
+) : Serializable

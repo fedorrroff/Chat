@@ -42,18 +42,7 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
             toolbarHolder.hideNavigationArrow()
         }
 
-        when(getFragmentType()) {
-            FragmentType.MENU_FRAMENT -> {
-                initToolbar()
-            }
-            FragmentType.NO_MENUFRAGMENT -> {
-
-            }
-            else -> {
-                initToolbar()
-            }
-        }
-
+        initToolbar()
     }
 
     open fun enableOptionsMenu() = true
@@ -68,11 +57,7 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
     }
 
     fun initToolbar() {
-        val customToolbar = provideCustomToolbar()
-        when {
-            customToolbar != null -> toolbarHolder.useCustomToolbar(customToolbar)
-            else -> toolbarHolder.useBaseToolbar(provideNavigationIcon())
-        }
+        toolbarHolder.useBaseToolbar(provideNavigationIcon())
     }
 
     override fun getToolbarTitle(): CharSequence = ""
@@ -80,8 +65,6 @@ abstract class BaseFragment: Fragment(), IToolbarProvider {
     override fun getToolbarSubtitle(): CharSequence? = null
 
     open fun showNavigationArrow(): Boolean = true
-
-    open fun provideCustomToolbar(): Toolbar? = null
 
     open fun provideNavigationIcon(): Int? = null
 

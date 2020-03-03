@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_padding">8dp</dimen>
+    <dimen name="spacing_normal_16">16dp</dimen>
+    <dimen name="btn_round_size_40">40dp</dimen>
+    <dimen name="spacing_maximum_72">72dp</dimen>
+
+    <dimen name="avatar_round_size">140dp</dimen>
 </resources>

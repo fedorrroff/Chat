@@ -1,6 +1,7 @@
 package com.example.myapplication.navigation
 
 import com.example.myapplication.models.Chat
+import com.example.myapplication.models.ChatUser
 
 interface INavigation {
 
@@ -8,9 +9,11 @@ interface INavigation {
 
     fun showLoginScreen()
 
-    fun showChatScreen(item: Chat)
+    fun showChatScreen(item: Chat, title: String)
 
     fun showSignUpScreen()
 
     fun showMyChatsScreen()
+
+    fun showProfileScreen(chatUser: ChatUser)
 }
