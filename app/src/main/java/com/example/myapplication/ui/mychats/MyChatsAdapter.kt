@@ -32,7 +32,7 @@ class MyChatsAdapter(
                 itemClickListener!!.onChatItemClicked(chatItem)
             }
         }
-        holder.name?.text = chatItem.users.firstOrNull { it != FirebaseAuth.getInstance().currentUser?.uid }
+        holder.name?.text = chatItem.users.firstOrNull { it.id != FirebaseAuth.getInstance().currentUser?.uid }?.name
         holder.message?.text = chatItem.messages.lastOrNull()?.message
     }
 

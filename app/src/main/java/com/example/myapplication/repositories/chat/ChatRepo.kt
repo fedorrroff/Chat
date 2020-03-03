@@ -18,7 +18,7 @@ class ChatRepo @Inject constructor():  IChatRepo {
         val newChat = Chat(
             chatId = getChatId(),
             messages = mutableListOf(),
-            users = listOf(currentUser.toChatUser().id, otherUser.toChatUser().id)
+            users = listOf(currentUser.toChatUser(), otherUser.toChatUser())
         )
         val isIdent = checkChatIdentity(currentUser, newChat)
 
@@ -52,9 +52,9 @@ class ChatRepo @Inject constructor():  IChatRepo {
             }
         }
 
-        userChats.forEach {
-            if (it.users.sorted() == newChat.users.sorted()) {
-                return it
+        userChats.forEach {chat ->
+            if (chat.users.sortedBy { it.id } == newChat.users.sortedBy{ it.id}) {
+                return chat
             }
         }
 

@@ -23,11 +23,11 @@ class GetUsersRepo @Inject constructor(): IGetUsersRepo {
         ref.apply {
             val ids = chat.users
 
-            ids.forEach {id ->
+            ids.forEach {chatUser ->
                 users.add(
                     this.children.firstOrNull {
                         val value = it.getValue(CurrentUser::class.java)
-                        value?.id == id
+                        value?.id == chatUser.id
                     }?.getValue((CurrentUser::class.java))!!
                 )
             }
