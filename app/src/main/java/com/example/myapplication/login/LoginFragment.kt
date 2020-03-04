@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.databinding.LoginFragmentBinding
@@ -40,6 +41,7 @@ class LoginFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideToolbar()
     }
 
     companion object {

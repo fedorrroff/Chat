@@ -8,6 +8,7 @@ import com.example.myapplication.mychats.MyChatsFragment
 import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.signup.SignUpFragment
 import com.example.myapplication.splash.SplashFragment
+import com.example.myapplication.toolbar.MenuDelegate
 import dagger.Component
 
 @Component(modules = [ActivityModule::class, ViewModelModule::class])
@@ -16,6 +17,10 @@ interface MainComponent {
     fun activity(): AppCompatActivity
 
     fun navigator(): Navigation
+
+    fun menuDelegate(): MenuDelegate
+
+    fun inject(activity: AppCompatActivity)
 
     fun inject(fragment: LoginFragment)
 

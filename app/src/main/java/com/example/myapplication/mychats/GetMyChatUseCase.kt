@@ -17,14 +17,14 @@ class GetMyChatUseCase @Inject constructor()  {
 
     fun setChat() {
         val ref = firebaseDatabase.getReference("users").child(currentUser?.uid!!)
-        val user = CurrentUser(currentUser.uid, listOf("testid"))
+        val user = CurrentUser(currentUser.uid, "dddd", listOf("testid"))
         ref.setValue(user)
     }
 
      fun getChatIdsList(action: (chatUsers: MutableList<Chat>) -> Unit) {
         val ref = firebaseDatabase.getReference("users").child(currentUser?.uid!!)
 
-        val chatUsers: MutableList<String> = mutableListOf()
+         val chatUsers: MutableList<String> = mutableListOf()
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val user = p0.getValue(CurrentUser::class.java)?.chats

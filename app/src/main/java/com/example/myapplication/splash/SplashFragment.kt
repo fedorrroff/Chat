@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
+import com.example.myapplication.core.FragmentType
 import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
@@ -33,14 +35,19 @@ class SplashFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideToolbar()
         view.postDelayed( {
             if (!isUserAutorized()) {
                 navigator.showLoginScreen()
             } else {
                 navigator.showMyChatsScreen()
             }
-        }, 2000)
+        }, 1500)
     }
+
+    override fun enableOptionsMenu(): Boolean = false
+
+    override fun getFragmentType(): FragmentType = FragmentType.NO_MENUFRAGMENT
 
     private fun isUserAutorized() = FirebaseAuth.getInstance().currentUser != null
 

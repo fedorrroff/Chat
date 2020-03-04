@@ -1,35 +1,28 @@
 package com.example.myapplication
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.view.Menu
-import android.widget.Toast
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.chat.adapters.ChatAdapter
-import com.example.myapplication.database.RealtimeDatabase
+import android.view.View
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.Toolbar
+import com.example.myapplication.di.ActivityModule
+import com.example.myapplication.di.DaggerMainComponent
+import com.example.myapplication.di.MainComponent
 import com.example.myapplication.di.MainComponentHolder
-import com.example.myapplication.models.CurrentUser
-import com.example.myapplication.models.Message
 import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
-import com.example.myapplication.splash.SplashFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
+import com.example.myapplication.toolbar.IMenuDelegate
+import com.example.myapplication.toolbar.IToolbarHolder
+import com.example.myapplication.toolbar.IToolbarProvider
+import com.example.myapplication.toolbar.MenuDelegate
+import com.example.myapplication.utils.makeGone
+import com.example.myapplication.utils.makeVisible
 import kotlinx.android.synthetic.main.activity_chat.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IToolbarHolder {
 
-    private val navigator: INavigation = Navigation(this)
+    private val menuDelegate: IMenuDelegate = MenuDelegate(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,30 +30,72 @@ class MainActivity : AppCompatActivity() {
 
         val mainComponentHolder = MainComponentHolder.getInstance()
         mainComponentHolder.initDaggerComponent(this)
+        getMainComponent().inject(this)
+
+        menuDelegate.onCreate(savedInstanceState)
 
         if(savedInstanceState == null) {
-            navigator.showSplashScreen()
+            mainComponentHolder.getMainComponent().navigator().showSplashScreen()
         }
     }
 
-    private fun getFirebaseInstanceId() = FirebaseInstanceId.getInstance().instanceId
-        .addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Main Activity", "getInstanceId failed", task.exception)
-                return@OnCompleteListener
-            }
+    private fun getMainComponent() :
+        MainComponent = DaggerMainComponent
+            .builder()
+            .activityModule(ActivityModule(this))
+            .build()
 
-            // Get new Instance ID token
-            val token = task.result?.token
 
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
+    override fun useCustomToolbar(toolbar: Toolbar?) {
+        appBarLayout?.visibility = View.GONE
+
+        fragment_container.setPadding(0, 0, 0, 0)
+        menuDelegate.useCustomToolbar(toolbar)
+        invalidateToolbarTitles()
+    }
+
+    override fun useBaseToolbar(navigationIcon: Int?) {
+        appBarLayout.visibility = View.VISIBLE
+
+        menuDelegate.useBaseToolbar(navigationIcon)
+        fragment_container.setPadding(0, 0, 0, 0)
+        invalidateToolbarTitles()
+    }
+
+    override fun invalidateToolbarTitles() {
+        invalidateToolbarTitle()
+        invalidateToolbarSubTitle()
+    }
+
+    override fun invalidateToolbarTitle() {
+        supportActionBar?.title = getToolbarProvider()?.getToolbarTitle()
+    }
+
+    override fun invalidateToolbarSubTitle() {
+        supportActionBar?.subtitle = getToolbarProvider()?.getToolbarSubtitle()
+    }
+
+    override fun showNavigationArrow() {
+        menuDelegate.showNavigationArrow()
+    }
+
+    override fun hideNavigationArrow() {
+        menuDelegate.hideNavigationArrow()
+    }
+
+    override fun hideToolbar() {
+        appBarLayout.makeGone()
+    }
+
+    override fun showToolbar() {
+        appBarLayout.makeVisible()
+    }
+
+    override fun getSupportActionBarActivity(): ActionBar? = supportActionBar
+
+    private fun getToolbarProvider() = supportFragmentManager.findFragmentById(R.id.fragment_container) as? IToolbarProvider
 
     companion object {
         const val TAG = "Main Activity"
-        var msgId = 0
     }
 }

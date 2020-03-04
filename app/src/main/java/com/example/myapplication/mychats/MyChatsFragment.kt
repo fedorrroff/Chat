@@ -1,12 +1,8 @@
 package com.example.myapplication.mychats
 
-import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toolbar
-import androidx.annotation.RequiresApi
+import android.view.*
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +11,7 @@ import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.databinding.MychatsFragmentBinding
 import com.example.myapplication.models.Chat
-import kotlinx.android.synthetic.main.chat_fragment.*
+import kotlinx.android.synthetic.main.mychats_fragment.*
 import javax.inject.Inject
 
 class MyChatsFragment: BaseFragment() {
@@ -51,10 +47,17 @@ class MyChatsFragment: BaseFragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activity?.setActionBar(toolbar)
-        activity?.actionBar?.displayOptions
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun provideCustomToolbar(): Toolbar? = myChatsToolbar
+
+    override fun getToolbarTitle(): CharSequence = "My App"
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_mychats, menu)
     }
 
     private fun setUpChatList() {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewModel"
@@ -12,30 +13,37 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarChatSingle"
         android:layout_width="match_parent"
-        android:id="@+id/appbarChats"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="50dp">
+        style="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_height="wrap_content">
 
-        <Toolbar
-            android:id="@+id/toolbar"
-            android:navigationIcon="@drawable/ic_exit_to_app_black_24dp"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/chatToolbar"
+            style="@style/ThemeOverlay.AppCompat.ActionBar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_height="wrap_content"
+            android:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+            app:subtitleTextColor="#EEEEEE"
+            app:titleTextColor="#EEEEEE"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messageListRecycler"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/holderView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbarChats"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messageListRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,25 +75,9 @@
             android:enabled="@{!viewModel.isButtonDisabled}"
             android:onClick="@{() -> viewModel.onSendButtonClicked()}"/>
 
-<!--        <Button-->
-<!--            android:id="@+id/sendBtn"-->
-<!--            android:layout_width="141dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:text="Send"-->
-<!--            android:enabled="@{!viewModel.isButtonDisabled}"-->
-<!--            android:onClick="@{() -> viewModel.onSendButtonClicked()}"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/editText" />-->
     </LinearLayout>
 
-    <Button
-        android:id="@+id/signOutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign out"
-        android:onClick="@{() -> viewModel.onSignOutButtonClicked()}"
-        app:layout_constraintBottom_toTopOf="@+id/holderView"
-        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
