@@ -78,20 +78,28 @@ class MyChatsViewModel @Inject constructor(
     }
 
     fun onCreateChat() {
-        GlobalScope.launch {
+        CoroutineScope(EmptyCoroutineContext).launch {
             when (val res = getUsersUseCase.getUserByName(desiredUser.get() ?: "")){
                 is Resource.Success -> {
                     if (currentUserForVM.name == res.data.name!!){
                         showNoElementToastEvent.postValue(Event("You can`t make chat with yourself"))
                     } else {
                         showToastSucseedEvent.postValue(Event("Chat created with user ${res.data.name}"))
-                        navigation.showChatScreen(createChatUseCase.createOrOpenChat(currentUserForVM, res.data), res.data.name)
+                        navigation.showChatScreen(createChatUseCase.createOrOpenChat((currentUser.value as Resource.Success).data!!, res.data), res.data.name)
+                        (currentUser as MutableLiveData).postValue(getUsersUseCase.getCurrentUser())
                     }
                 }
                 is Resource.Failure -> {
                     showNoElementToastEvent.postValue(Event("There are no user with such name"))
                 }
             }
+        }
+    }
+
+    //костыль ебаный
+    fun updateLastMsgs() {
+        CoroutineScope(EmptyCoroutineContext).launch {
+            (chats as MutableLiveData).postValue(myChatUseCase.getMyChats())
         }
     }
 

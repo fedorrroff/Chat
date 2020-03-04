@@ -20,7 +20,7 @@ class ChatRepo @Inject constructor():  IChatRepo {
             messages = mutableListOf(),
             users = listOf(currentUser.toChatUser(), otherUser.toChatUser())
         )
-        val isIdent = checkChatIdentity(currentUser, newChat)
+        val isIdent = checkChatIdentity(newChat)
 
         return if (isIdent == newChat) {
             val ref = firebaseDatabase.getReference("chats/")
@@ -40,24 +40,35 @@ class ChatRepo @Inject constructor():  IChatRepo {
         return ref.children.count().toString()
     }
 
-    private suspend fun checkChatIdentity(currentUser: CurrentUser, newChat: Chat): Chat {
+    private suspend fun checkChatIdentity(newChat: Chat): Chat {
         val ref = firebaseDatabase.getReference("chats").getValue()
 
-        val userChats = mutableListOf<Chat>()
+        val userChats = getChats()
 
-        currentUser.chats.forEach {chatId ->
-            val chat = ref.children.firstOrNull { chatId == it.getValue(Chat::class.java)?.chatId }
-            if (chat != null) {
-                userChats.add(chat.getValue(Chat::class.java)!!)
-            }
-        }
+//        currentUser.chats.forEach {chatId ->
+//            val chat = ref.children.firstOrNull { chatId == it.getValue(Chat::class.java)?.chatId }
+//            if (chat != null) {
+//                userChats.add(chat.getValue(Chat::class.java)!!)
+//            }
+//        }
 
         userChats.forEach {chat ->
-            if (chat.users.sortedBy { it.id } == newChat.users.sortedBy{ it.id}) {
+            if (chat?.users?.sortedBy { it.id } == newChat.users.sortedBy{ it.id}) {
                 return chat
             }
         }
 
         return newChat
+    }
+
+    private suspend fun getChats(): MutableList<Chat?> {
+        val ref = firebaseDatabase.getReference("chats").getValue()
+
+        val chats = mutableListOf<Chat?>()
+        ref.children.forEach {
+            chats.add(it.getValue(Chat::class.java))
+        }
+
+        return chats
     }
 }
