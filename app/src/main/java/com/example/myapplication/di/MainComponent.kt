@@ -13,7 +13,7 @@ import com.example.myapplication.ui.splash.SplashFragment
 import com.example.myapplication.toolbar.MenuDelegate
 import dagger.Component
 
-@Component(modules = [ActivityModule::class, ViewModelModule::class, RepoModule::class])
+@Component(modules = [ActivityModule::class, ViewModelModule::class])
 interface MainComponent {
 
     fun activity(): AppCompatActivity

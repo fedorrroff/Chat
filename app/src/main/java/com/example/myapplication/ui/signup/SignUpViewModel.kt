@@ -4,13 +4,14 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.example.myapplication.domain.signup.SignUpUseCase
 import com.example.myapplication.navigation.Navigation
 import javax.inject.Inject
 
 class SignUpViewModel @Inject constructor(
     val navigation: Navigation,
     val signUpUseCase: SignUpUseCase
-    ) : ViewModel(), LifecycleObserver{
+) : ViewModel(), LifecycleObserver{
 
     val email: ObservableField<String> = ObservableField("")
     val password: ObservableField<String> = ObservableField("")
@@ -24,6 +25,6 @@ class SignUpViewModel @Inject constructor(
         val email = requireNotNull(email.get())
         val password = requireNotNull(password.get())
         val name = requireNotNull(name.get())
-        signUpUseCase(email, password, name)
+        signUpUseCase.createAccount(email, password, name)
     }
 }

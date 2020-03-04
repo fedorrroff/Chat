@@ -5,6 +5,7 @@ import com.example.myapplication.domain.Resource
 import com.example.myapplication.models.Chat
 import com.example.myapplication.models.CurrentUser
 import com.example.myapplication.utils.getValue
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class GetUsersRepo @Inject constructor(): IGetUsersRepo {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
     override suspend fun getUsersByIds(chat: Chat): Resource.Success<MutableList<CurrentUser>> {
         val ref = firebaseDatabase.getReference("users").getValue()
@@ -49,5 +51,12 @@ class GetUsersRepo @Inject constructor(): IGetUsersRepo {
         } else {
             Resource.Failure(Exception())
         }
+    }
+
+    override suspend fun getCurrentUser(): Resource.Success<CurrentUser?> {
+        val currentUser = firebaseAuth.currentUser
+        val ref = firebaseDatabase.getReference("users").child(currentUser?.uid!!).getValue()
+
+        return Resource.Success(ref.getValue(CurrentUser::class.java))
     }
 }

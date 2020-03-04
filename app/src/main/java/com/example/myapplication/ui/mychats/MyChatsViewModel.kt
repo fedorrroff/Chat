@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.myapplication.domain.Resource
 import com.example.myapplication.domain.chat.CreateChatUseCase
 import com.example.myapplication.domain.getusers.GetUsersUseCase
+import com.example.myapplication.domain.mychats.MyChatsUseCase
 import com.example.myapplication.models.Chat
 import com.example.myapplication.models.ChatUser
 import com.example.myapplication.models.CurrentUser
@@ -15,22 +16,41 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.Exception
 import kotlin.coroutines.EmptyCoroutineContext
 
 class MyChatsViewModel @Inject constructor(
     val navigation: Navigation,
-    private val myChatUseCase: GetMyChatUseCase,
+    private val myChatUseCase: MyChatsUseCase,
     private val getUsersUseCase: GetUsersUseCase,
     private val createChatUseCase: CreateChatUseCase
 ): ViewModel(), LifecycleObserver {
 
-    val chats = MutableLiveData<MutableList<Chat>>()
-    val currentUser = MutableLiveData<CurrentUser>()
+    val chats = liveData {
+        emit(Resource.Loading())
+        try {
+            emit(myChatUseCase.getMyChats())
+        } catch (e: Exception) {
+            emit(Resource.Failure<MutableList<Chat>>(e))
+        }
+    }
+
+    val currentUser = liveData {
+        emit(Resource.Loading())
+        try {
+            emit(getUsersUseCase.getCurrentUser())
+        } catch (e: Exception) {
+            emit(Resource.Failure<CurrentUser>(e))
+        }
+    }
 
     val showNoElementToastEvent = MutableLiveData<Event<String>>()
     val showSearchDialogEvent = MutableLiveData<Event<Unit>>()
+    val showToastSucseedEvent = MutableLiveData<Event<String>>()
 
-    val searchebleUser = ObservableField<String>()
+    val desiredUser = ObservableField<String>()
+
+    private val currentUserForVM: CurrentUser by lazy { (currentUser.value as Resource.Success).data!! }
 
     fun bind(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(this)
@@ -43,7 +63,7 @@ class MyChatsViewModel @Inject constructor(
             chatUsers.addAll(getUsersUseCase.getUsersByIds(item).data)
 
             val autorizedChatUser = chatUsers.firstOrNull {user ->
-                user.id == currentUser.value?.id
+                user.id == currentUserForVM.id
             }
             val title = chatUsers.firstOrNull {currUser ->
                 autorizedChatUser?.id != currUser.id
@@ -53,28 +73,19 @@ class MyChatsViewModel @Inject constructor(
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun initChats() {
-        myChatUseCase.getChatIdsList {
-            it.let { chats.postValue(it) }
-        }
-        myChatUseCase.getCurrentUser {
-            it.let { currentUser.postValue(it) }
-        }
-    }
-
     fun onFABclicked() {
         showSearchDialogEvent.postValue(Event(Unit))
     }
 
     fun onCreateChat() {
         GlobalScope.launch {
-            when (val res = getUsersUseCase.getUserByName(searchebleUser.get() ?: "")){
+            when (val res = getUsersUseCase.getUserByName(desiredUser.get() ?: "")){
                 is Resource.Success -> {
-                    if (currentUser.value?.name == res.data.name!!){
+                    if (currentUserForVM.name == res.data.name!!){
                         showNoElementToastEvent.postValue(Event("You can`t make chat with yourself"))
                     } else {
-                        navigation.showChatScreen(createChatUseCase.createOrOpenChat(currentUser.value!!, res.data), res.data.name)
+                        showToastSucseedEvent.postValue(Event("Chat created with user ${res.data.name}"))
+                        navigation.showChatScreen(createChatUseCase.createOrOpenChat(currentUserForVM, res.data), res.data.name)
                     }
                 }
                 is Resource.Failure -> {

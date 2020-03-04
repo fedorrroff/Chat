@@ -1,7 +1,8 @@
-package com.example.myapplication.ui.login
+package com.example.myapplication.domain.login
 
 import android.util.Log
 import com.example.myapplication.navigation.Navigation
+import com.example.myapplication.ui.login.LoginFragment
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 

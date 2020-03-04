@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.mychats
+package com.example.myapplication.ui.mychats.adapters
 
 import android.view.LayoutInflater
 import android.view.View

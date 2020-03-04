@@ -9,4 +9,6 @@ interface IGetUsersUseCase {
     suspend fun getUsersByIds(chat: Chat): Resource.Success<MutableList<CurrentUser>>
 
     suspend fun getUserByName(name: String): Resource<CurrentUser>
+
+    suspend fun getCurrentUser(): Resource.Success<CurrentUser?>
 }

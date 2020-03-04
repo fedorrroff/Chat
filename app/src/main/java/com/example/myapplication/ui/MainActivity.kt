@@ -9,6 +9,7 @@ import com.example.myapplication.di.ActivityModule
 import com.example.myapplication.di.DaggerMainComponent
 import com.example.myapplication.di.MainComponent
 import com.example.myapplication.di.MainComponentHolder
+import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.toolbar.IMenuDelegate
 import com.example.myapplication.toolbar.IToolbarHolder
 import com.example.myapplication.toolbar.IToolbarProvider
@@ -16,10 +17,13 @@ import com.example.myapplication.toolbar.MenuDelegate
 import com.example.myapplication.utils.makeGone
 import com.example.myapplication.utils.makeVisible
 import kotlinx.android.synthetic.main.activity_chat.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), IToolbarHolder {
 
     private val menuDelegate: IMenuDelegate = MenuDelegate(this)
+
+    lateinit var navigation: Navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +32,12 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
         val mainComponentHolder = MainComponentHolder.getInstance()
         mainComponentHolder.initDaggerComponent(this)
         getMainComponent().inject(this)
+        navigation = getMainComponent().navigator()
 
         menuDelegate.onCreate(savedInstanceState)
 
         if(savedInstanceState == null) {
-            mainComponentHolder.getMainComponent().navigator().showSplashScreen()
+            navigation.showSplashScreen()
         }
     }
 

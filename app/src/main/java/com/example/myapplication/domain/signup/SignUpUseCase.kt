@@ -1,8 +1,9 @@
-package com.example.myapplication.ui.signup
+package com.example.myapplication.domain.signup
 
 import android.util.Log
 import com.example.myapplication.models.CurrentUser
 import com.example.myapplication.navigation.Navigation
+import com.example.myapplication.ui.signup.SignUpFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
@@ -11,13 +12,11 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(
     val navigator: Navigation,
     val auth: FirebaseAuth
-) {
+): ISignupUseCase {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
 
-    operator fun invoke(email: String, password: String, name: String?) = createAccount(email, password, name)
-
-    private fun createAccount(email: String, password: String, name: String?) {
+    override fun createAccount(email: String, password: String, name: String?) {
         Log.d(SignUpFragment.TAG, "createAccount:$email")
 
         auth.createUserWithEmailAndPassword(email, password)

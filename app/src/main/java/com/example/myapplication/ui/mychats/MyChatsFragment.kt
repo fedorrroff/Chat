@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.databinding.MychatsFragmentBinding
+import com.example.myapplication.domain.Resource
 import com.example.myapplication.models.Chat
 import com.example.myapplication.models.CurrentUser
+import com.example.myapplication.ui.mychats.adapters.MyChatsAdapter
 import com.example.myapplication.utils.toChatUser
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -75,10 +77,16 @@ class MyChatsFragment: BaseFragment() {
                 }
             }
             viewModel.chats.observe(viewLifecycleOwner, Observer {
-                if (it.isEmpty()){
+                when(it) {
+                    is Resource.Success -> {
+                        this.replaceItems(it.data)
+                    }
+                    is Resource.Failure -> {
 
-                } else {
-                    it?.let { this.replaceItems(it) }
+                    }
+                    is Resource.Loading -> {
+
+                    }
                 }
             })
         }
@@ -94,6 +102,15 @@ class MyChatsFragment: BaseFragment() {
             }
         })
 
+        viewModel.showToastSucseedEvent.observe(viewLifecycleOwner, Observer { event ->
+            event?.getContentIfNotHandledOrReturnNull()?.let {
+                Snackbar.make(view, it, Snackbar.LENGTH_LONG).apply {
+                    setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    show()
+                }
+            }
+        })
+
         viewModel.showSearchDialogEvent.observe(viewLifecycleOwner, Observer { event ->
             event?.getContentIfNotHandledOrReturnNull()?.let {
                 val searchDialog = SearchUserDialogFragment()
@@ -104,7 +121,14 @@ class MyChatsFragment: BaseFragment() {
 
     private fun setUpCurrentUser() {
         viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-            currentUser = it
+            when(it) {
+                is Resource.Success -> {
+                    currentUser = it.data!!
+                }
+                is Resource.Failure -> {
+
+                }
+            }
         })
     }
 

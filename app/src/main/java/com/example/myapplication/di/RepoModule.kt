@@ -6,6 +6,8 @@ import com.example.myapplication.repositories.getusers.GetUsersRepo
 import com.example.myapplication.repositories.getusers.IGetUsersRepo
 import com.example.myapplication.repositories.messaging.IMessagingRepo
 import com.example.myapplication.repositories.messaging.MessagingRepo
+import com.example.myapplication.repositories.mychats.IMyChatsRepo
+import com.example.myapplication.repositories.mychats.MyChatsRepo
 import dagger.Binds
 import dagger.Module
 
@@ -20,4 +22,7 @@ abstract class RepoModule {
 
     @Binds
     abstract fun bindGetUsersRepo(repo: GetUsersRepo): IGetUsersRepo
+
+    @Binds
+    abstract fun bindGetMyChatsRepo(repo: MyChatsRepo): IMyChatsRepo
 }

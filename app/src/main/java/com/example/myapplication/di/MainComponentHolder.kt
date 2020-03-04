@@ -1,7 +1,6 @@
 package com.example.myapplication.di
 
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.di.MainComponentHolder.InstanceHolder.Companion.INSTANCE
 
 class MainComponentHolder {
 
@@ -17,12 +16,6 @@ class MainComponentHolder {
     }
 
     companion object {
-        fun getInstance() = INSTANCE
-    }
-
-    class InstanceHolder {
-        companion object {
-            val INSTANCE: MainComponentHolder = MainComponentHolder()
-        }
+        fun getInstance() = MainComponentHolder()
     }
 }
