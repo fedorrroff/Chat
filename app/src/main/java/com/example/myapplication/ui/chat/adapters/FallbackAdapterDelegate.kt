@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.chat.adapters
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,9 @@ import com.example.myapplication.R
 import com.example.myapplication.models.Message
 import com.hannesdorfmann.adapterdelegates4.AbsFallbackAdapterDelegate
 
-class FallbackAdapterDelegate : AbsFallbackAdapterDelegate<MutableList<Message>>() {
+class FallbackAdapterDelegate(
+
+) : AbsFallbackAdapterDelegate<MutableList<Message>>() {
 
     override fun onBindViewHolder(
         items: MutableList<Message>,

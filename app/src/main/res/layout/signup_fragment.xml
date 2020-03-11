@@ -44,7 +44,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:hint="Name"
-        android:text="@={viewModel.name}"
+        android:text="@={viewModel.tag}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -75,6 +75,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emaiEt" />
 
+    <EditText
+        android:id="@+id/firstNameEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:hint="First name"
+        android:text="@={viewModel.firstName}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEt" />
+
+    <EditText
+        android:id="@+id/lastNameEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:hint="Last name(optional)"
+        android:text="@={viewModel.lastName}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstNameEt" />
+
     <Button
         android:id="@+id/submitRegBtn"
         android:layout_width="350dp"
@@ -88,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:fitsSystemWindows="true"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEt" />
+        app:layout_constraintTop_toBottomOf="@+id/lastNameEt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

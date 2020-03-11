@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.ui.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
@@ -14,8 +15,8 @@ import javax.inject.Inject
 
 class SplashFragment: BaseFragment() {
 
-    @Inject
-    lateinit var navigator: Navigation
+//    @Inject
+//    lateinit var navigator: Navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +35,13 @@ class SplashFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideToolbar()
 
+        val navigation = Navigation(requireActivity() as AppCompatActivity)
+
         view.postDelayed( {
             if (!isUserAutorized()) {
-                navigator.showLoginScreen()
+                navigation.showLoginScreen()
             } else {
-                navigator.showMyChatsScreen()
+                navigation.showMyChatsScreen()
             }
         }, 1500)
     }

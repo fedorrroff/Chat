@@ -7,9 +7,12 @@
             type="com.example.myapplication.ui.login.LoginViewModel" />
     </data>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
@@ -21,6 +24,10 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:inputType="text"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@id/passwordEt"
+        android:singleLine="true"
         android:text="@={viewModel.email}"
         android:hint="login"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,4 +99,5 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </layout>

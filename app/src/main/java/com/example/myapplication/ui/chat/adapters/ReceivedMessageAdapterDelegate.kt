@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.chat.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class ReceivedMessageAdapterDelegate :
         holder: ReceivedMessageViewHolder,
         payloads: MutableList<Any>
     ) {
+        Log.d("xoxoxo", "onBind ReceivedMessageAdapterDelegate")
         holder.messageTextView?.text = item.message
         holder.sender?.text = "Me:"
     }

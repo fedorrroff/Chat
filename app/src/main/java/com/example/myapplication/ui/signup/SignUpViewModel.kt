@@ -7,8 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.domain.registration.RegistrationUseCase
-import com.example.myapplication.domain.signup.SignUpUseCase
-import com.example.myapplication.navigation.Navigation
+import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.repositories.registration.RegistrationRepo
 import com.example.myapplication.utils.Event
 import kotlinx.coroutines.CoroutineScope
@@ -17,30 +16,39 @@ import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 class SignUpViewModel @Inject constructor(
-    val navigation: Navigation,
+//    val navigation: Navigation,
     private val registrationUseCase: RegistrationUseCase
 ) : ViewModel(), LifecycleObserver{
 
     val email: ObservableField<String> = ObservableField("")
     val password: ObservableField<String> = ObservableField("")
-    val name: ObservableField<String> = ObservableField("")
+    val tag: ObservableField<String> = ObservableField("")
+    val firstName: ObservableField<String> = ObservableField("")
+    val lastName: ObservableField<String> = ObservableField("")
 
     val showErrorSnackbarEvent = MutableLiveData<Event<String>>()
+
+    lateinit var navigation: INavigation
 
     fun bind(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(this)
     }
 
-    val buttonEnabled= object: ObservableBoolean(email, password) {
-        override fun get(): Boolean = !email.get().isNullOrEmpty() && !password.get().isNullOrEmpty() && !name.get().isNullOrEmpty()
+    val buttonEnabled= object: ObservableBoolean(email, password, tag, firstName) {
+        override fun get(): Boolean = !email.get().isNullOrEmpty()
+                && !password.get().isNullOrEmpty()
+                && !tag.get().isNullOrEmpty()
+                && !firstName.get().isNullOrEmpty()
     }
 
     fun onSignUpButtonClicked() {
         val email = requireNotNull(email.get())
         val password = requireNotNull(password.get())
-        val name = requireNotNull(name.get())
+        val tag = requireNotNull(tag.get())
+        val name = requireNotNull(firstName.get())
+        val lastName = requireNotNull(lastName.get())
         CoroutineScope(EmptyCoroutineContext).launch {
-            val code = registrationUseCase.createAccount(email, password, name)
+            val code = registrationUseCase.createAccount(email, password, tag, name, lastName)
             when (code.data) {
                 RegistrationRepo.CODE_SUCCESS -> {
                     navigation.showMyChatsScreen()

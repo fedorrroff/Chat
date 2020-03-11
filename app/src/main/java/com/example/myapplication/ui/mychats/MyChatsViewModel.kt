@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.mychats
 
+import android.graphics.Bitmap
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.example.myapplication.domain.Resource
@@ -10,21 +11,24 @@ import com.example.myapplication.models.Chat
 import com.example.myapplication.models.ChatUser
 import com.example.myapplication.models.CurrentUser
 import com.example.myapplication.navigation.Navigation
+import com.example.myapplication.repositories.mychats.MyChatsRepo
 import com.example.myapplication.utils.Event
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.Exception
 import kotlin.coroutines.EmptyCoroutineContext
 
 class MyChatsViewModel @Inject constructor(
-    val navigation: Navigation,
+//    private val navigation: Navigation,
     private val myChatUseCase: MyChatsUseCase,
     private val getUsersUseCase: GetUsersUseCase,
-    private val createChatUseCase: CreateChatUseCase
+    private val createChatUseCase: CreateChatUseCase,
+    private val myChatsRepo: MyChatsRepo
 ): ViewModel(), LifecycleObserver {
+
+    lateinit var navigation: Navigation
 
     val chats = liveData {
         emit(Resource.Loading())
@@ -47,6 +51,8 @@ class MyChatsViewModel @Inject constructor(
     val showNoElementToastEvent = MutableLiveData<Event<String>>()
     val showSearchDialogEvent = MutableLiveData<Event<Unit>>()
     val showToastSucseedEvent = MutableLiveData<Event<String>>()
+    val pushChatToTopEvent = MutableLiveData<Event<String?>>()
+    val updateSingleChatEvent = MutableLiveData<Event<Chat>>()
 
     val desiredUser = ObservableField<String>()
 
@@ -54,6 +60,13 @@ class MyChatsViewModel @Inject constructor(
 
     fun bind(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(this)
+
+        myChatsRepo.addNewMsgListener {
+            pushChatToTopEvent.postValue(Event(it))
+            CoroutineScope(EmptyCoroutineContext).launch {
+                updateSingleChatEvent.postValue(Event(myChatsRepo.getChatById(it!!).data!!))
+            }
+        }
     }
 
     fun onChatItemClicked(item: Chat) {
@@ -65,10 +78,11 @@ class MyChatsViewModel @Inject constructor(
             val autorizedChatUser = chatUsers.firstOrNull {user ->
                 user.id == currentUserForVM.id
             }
-            val title = chatUsers.firstOrNull {currUser ->
+            val user = chatUsers.firstOrNull {currUser ->
                 autorizedChatUser?.id != currUser.id
-            }?.name.toString()
+            }
 
+            val title = user?.name + " " + (user?.lastName ?: "")
             navigation.showChatScreen(item, title)
         }
     }
@@ -81,22 +95,23 @@ class MyChatsViewModel @Inject constructor(
         CoroutineScope(EmptyCoroutineContext).launch {
             when (val res = getUsersUseCase.getUserByName(desiredUser.get() ?: "")){
                 is Resource.Success -> {
-                    if (currentUserForVM.name == res.data.name!!){
+                    if (currentUserForVM.tag == res.data.tag!!){
                         showNoElementToastEvent.postValue(Event("You can`t make chat with yourself"))
                     } else {
-                        showToastSucseedEvent.postValue(Event("Chat created with user ${res.data.name}"))
-                        navigation.showChatScreen(createChatUseCase.createOrOpenChat((currentUser.value as Resource.Success).data!!, res.data), res.data.name)
+                        showToastSucseedEvent.postValue(Event("Chat created with user ${res.data.tag}"))
+                        val userFullName = res.data.name + " " + (res.data.lastName)
+                        navigation.showChatScreen(createChatUseCase.createOrOpenChat((currentUser.value as Resource.Success).data!!, res.data), userFullName)
                         (currentUser as MutableLiveData).postValue(getUsersUseCase.getCurrentUser())
                     }
                 }
                 is Resource.Failure -> {
-                    showNoElementToastEvent.postValue(Event("There are no user with such name"))
+                    showNoElementToastEvent.postValue(Event("There are no user with such tag"))
                 }
             }
         }
     }
 
-    //костыль ебаный
+    //костыль ебаный сука опять тебя вызывать
     fun updateLastMsgs() {
         CoroutineScope(EmptyCoroutineContext).launch {
             (chats as MutableLiveData).postValue(myChatUseCase.getMyChats())

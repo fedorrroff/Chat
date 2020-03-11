@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.myapplication.domain.messaging.MessagingUseCase
 import com.example.myapplication.models.Chat
 import com.example.myapplication.models.Message
+import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.utils.Event
 import com.google.firebase.auth.FirebaseAuth
@@ -14,37 +15,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChatViewModel @Inject constructor(
-    private val messagingUseCase: MessagingUseCase,
-    val navigation: Navigation
+    private val messagingUseCase: MessagingUseCase
 ): ViewModel(), LifecycleObserver {
+
+    lateinit var navigation: INavigation
 
     val messages = MutableLiveData<MutableList<Message>>()
 
     val scrollToBottomEvent = MutableLiveData<Event<Int>>()
 
-//    val messages = liveData {
-//        emit(Resource.Loading())
-//        try {
-//            emit(messagingUseCase.getMessages(currentChat.value!!) {
-//                emit(Resource.Success(it))
-//            })
-//        } catch (e: Exception) {
-//            emit(Resource.Failure(e))
-//        }
-//    }
-
-//    val chatUsers = liveData {
-//        emit(Resource.Loading())
-//        try {
-//            emit(getUsersUseCase.getUsersByIds(currentChat.value!!))
-//        } catch (e: Exception) {
-//            emit(Resource.Failure(e))
-//        }
-//    }
-
     val newMessage = ObservableField<String>()
 
     var currentChat = MutableLiveData<Chat>()
+
+    private var messageCount: Int = 0
 
     val isButtonDisabled = object: ObservableBoolean(newMessage) {
         override fun get(): Boolean = newMessage.get().isNullOrEmpty()
@@ -59,9 +43,9 @@ class ChatViewModel @Inject constructor(
         GlobalScope.launch {
             messagingUseCase.getMessages(currentChat.value!!) {
                 messages.postValue(it)
+                messageCount = it.size
             }
         }
-
     }
 
     fun onSignOutButtonClicked() {
@@ -73,7 +57,7 @@ class ChatViewModel @Inject constructor(
         GlobalScope.launch {
             messagingUseCase.sendMessage(newMessage.get()?.trim()  ?: "")
             newMessage.set("")
-            scrollToBottomEvent.postValue(Event(currentChat.value?.messages!!.size))
+            scrollToBottomEvent.postValue(Event(messageCount))
         }
     }
 }

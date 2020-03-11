@@ -2,9 +2,10 @@ package com.example.myapplication.ui.signup
 
 import android.app.ProgressDialog.show
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -12,10 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.databinding.SignupFragmentBinding
+import com.example.myapplication.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.signup_fragment.*
 import javax.inject.Inject
 
-class SignUpFragment: BaseFragment() {
+class SignUpFragment: BaseFragment(), TextView.OnEditorActionListener {
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
@@ -39,6 +43,8 @@ class SignUpFragment: BaseFragment() {
         binding.lifecycleOwner = this
         viewModel.bind(this)
 
+        viewModel.navigation = Navigation(requireActivity() as AppCompatActivity)
+
         return binding.root
     }
 
@@ -46,6 +52,7 @@ class SignUpFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         addListeners(view)
+        lastNameEt.setOnEditorActionListener(this)
     }
 
     private fun addListeners(view: View) {
@@ -57,6 +64,15 @@ class SignUpFragment: BaseFragment() {
                 }
             }
         })
+    }
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_DONE) {
+            if (viewModel.buttonEnabled.get()) {
+                viewModel.onSignUpButtonClicked()
+            }
+        }
+        return true
     }
 
     override fun getToolbarTitle(): CharSequence = "Registration"

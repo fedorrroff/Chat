@@ -4,5 +4,7 @@ import java.io.Serializable
 
 data class ChatUser(
     val id: String = "",
-    val name: String = ""
+    val tag: String = "",
+    val name: String = "",
+    val lastName: String = ""
 ): Serializable

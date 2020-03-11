@@ -3,6 +3,7 @@ package com.example.myapplication.ui.chat
 import android.os.Bundle
 import android.service.media.MediaBrowserService
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +15,7 @@ import com.example.myapplication.core.BaseFragment
 import com.example.myapplication.databinding.ChatFragmentBinding
 import com.example.myapplication.domain.Resource
 import com.example.myapplication.models.Chat
+import com.example.myapplication.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
@@ -50,6 +52,7 @@ class ChatFragment: BaseFragment() {
         binding.lifecycleOwner = this
         viewModel.bind(this)
 
+        viewModel.navigation = Navigation(requireActivity() as AppCompatActivity)
         setUpMessageList()
         subscribeToEvents()
 
@@ -82,8 +85,8 @@ class ChatFragment: BaseFragment() {
         binding.messageListRecycler.adapter = ChatAdapter().apply {
             viewModel.messages.observe(viewLifecycleOwner, Observer {
                 it?.let{
-                        this.items = it
-                    }
+                    this.items = it
+                }
             })
         }
         binding.messageListRecycler.addItemDecoration(MarginItemDecoration(
