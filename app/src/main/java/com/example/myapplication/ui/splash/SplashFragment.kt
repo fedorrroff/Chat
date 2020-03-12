@@ -33,6 +33,7 @@ class SplashFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideToolbar()
+
         view.postDelayed( {
             if (!isUserAutorized()) {
                 navigator.showLoginScreen()

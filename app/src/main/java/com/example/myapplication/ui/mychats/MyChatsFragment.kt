@@ -59,6 +59,9 @@ class MyChatsFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // вызов костыля ебаного
+        viewModel.updateLastMsgs()
     }
 
     override fun getToolbarTitle(): CharSequence = "My App"
