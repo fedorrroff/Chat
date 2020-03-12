@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.mychats
 
-import android.graphics.Bitmap
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.example.myapplication.domain.Resource
@@ -21,11 +20,9 @@ import kotlin.Exception
 import kotlin.coroutines.EmptyCoroutineContext
 
 class MyChatsViewModel @Inject constructor(
-//    private val navigation: Navigation,
     private val myChatUseCase: MyChatsUseCase,
     private val getUsersUseCase: GetUsersUseCase,
-    private val createChatUseCase: CreateChatUseCase,
-    private val myChatsRepo: MyChatsRepo
+    private val createChatUseCase: CreateChatUseCase
 ): ViewModel(), LifecycleObserver {
 
     lateinit var navigation: Navigation
@@ -61,10 +58,10 @@ class MyChatsViewModel @Inject constructor(
     fun bind(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(this)
 
-        myChatsRepo.addNewMsgListener {
+        myChatUseCase.addNewMsgListener {
             pushChatToTopEvent.postValue(Event(it))
             CoroutineScope(EmptyCoroutineContext).launch {
-                updateSingleChatEvent.postValue(Event(myChatsRepo.getChatById(it!!).data!!))
+                updateSingleChatEvent.postValue(Event(myChatUseCase.getChatById(it!!).data!!))
             }
         }
     }

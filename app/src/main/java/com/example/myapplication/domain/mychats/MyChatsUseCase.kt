@@ -10,4 +10,8 @@ class MyChatsUseCase @Inject constructor(
 ): IMyChatsUseCase {
 
     override suspend fun getMyChats(): Resource.Success<MutableList<Chat>> = myChatsRepo.getMyChats()
+
+    override fun addNewMsgListener(action: (chatId: String?) -> Unit) = myChatsRepo.addNewMsgListener(action)
+
+    override suspend fun getChatById(chatId: String): Resource.Success<Chat?> = myChatsRepo.getChatById(chatId)
 }

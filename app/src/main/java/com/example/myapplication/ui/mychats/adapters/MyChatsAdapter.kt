@@ -10,7 +10,6 @@ import com.example.myapplication.R
 import com.example.myapplication.models.Chat
 import com.example.myapplication.utils.AvatarCreator
 import com.example.myapplication.utils.DateUtils
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 
 class MyChatsAdapter(
@@ -60,7 +59,7 @@ class MyChatsAdapter(
             initials.toUpperCase())
         )
 
-        val time = DateUtils.toDate(chatItem.messages.lastOrNull()!!.timestamp)
+        val time = DateUtils.messageTime(chatItem.messages.lastOrNull()!!.timestamp)
         holder.time?.text = time
     }
 

@@ -60,4 +60,8 @@ class ChatViewModel @Inject constructor(
             scrollToBottomEvent.postValue(Event(messageCount))
         }
     }
+
+    fun onFABclicked() {
+        scrollToBottomEvent.postValue(Event(messageCount))
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.chat.adapters
 
+import android.view.View
+import com.example.myapplication.R
 import com.example.myapplication.models.Message
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter

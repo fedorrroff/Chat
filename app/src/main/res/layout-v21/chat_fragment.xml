@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
-
         <variable
             name="viewModel"
             type="com.example.myapplication.ui.chat.ChatViewModel" />
@@ -14,6 +13,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/dateTvChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/date_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="1dp"
+            android:textSize="20sp"
+            android:textColor="#BDBDBD"
+            android:padding="6dp"
+            tools:text="March, 12" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messageListRecycler"
@@ -21,7 +35,8 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/holderView"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
             android:id="@+id/holderView"
@@ -32,14 +47,13 @@
 
             <EditText
                 android:id="@+id/editText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_weight="2"
                 android:ems="10"
                 android:text="@={viewModel.newMessage}"
-
                 app:layout_constraintEnd_toStartOf="@+id/sendBtn"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -52,9 +66,20 @@
                 android:enabled="@{!viewModel.isButtonDisabled}"
                 android:onClick="@{() -> viewModel.onSendButtonClicked()}"
                 android:scaleType="fitCenter" />
-
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/spacing_normal_16"
+            android:layout_marginBottom="@dimen/spacing_maximum_72"
+            android:backgroundTint="@color/gray"
+            app:fabSize="normal"
+            android:onClick="@{() -> viewModel.onFABclicked()}"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

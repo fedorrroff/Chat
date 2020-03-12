@@ -37,7 +37,7 @@ class MyChatsRepo @Inject constructor(
         return Resource.Success(chats)
     }
 
-    suspend fun getChatById(chatId: String): Resource.Success<Chat?>{
+    override suspend fun getChatById(chatId: String): Resource.Success<Chat?>{
         val ref = firebaseDatabase.getReference("chats/${chatId}").getValue()
 
         val chat = ref.getValue(Chat::class.java)
@@ -46,7 +46,7 @@ class MyChatsRepo @Inject constructor(
     }
 
     //перенести в интерфейс
-    fun addNewMsgListener(action: (chatId: String?) -> Unit) {
+    override fun addNewMsgListener(action: (chatId: String?) -> Unit) {
         val ref = firebaseDatabase.getReference("chats")
 
         ref.addChildEventListener(object : ChildEventListener{
