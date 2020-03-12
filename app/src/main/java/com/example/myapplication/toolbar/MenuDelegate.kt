@@ -1,5 +1,6 @@
 package com.example.myapplication.toolbar
 
+import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -19,10 +20,6 @@ class MenuDelegate(private val activity: AppCompatActivity) : IMenuDelegate {
         setToolbar(activity.toolbar, navigationIcon)
     }
 
-    override fun useCustomToolbar(toolbar: Toolbar?) {
-        setToolbar(toolbar)
-    }
-
     override fun showNavigationArrow() {
         navigationIconVisibility = true
     }
@@ -31,21 +28,26 @@ class MenuDelegate(private val activity: AppCompatActivity) : IMenuDelegate {
         navigationIconVisibility = false
     }
 
-    private fun setToolbar(toolbar: Toolbar?, navigationIcon: Int? = null) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun setToolbar(toolbar: Toolbar?, navigationIcon: Int? = null, naviationAction: (() -> Unit)? = null) {
         activity.apply {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(true)
 
+            //TODO add action
             toolbar?.setNavigationOnClickListener {
                 onBackPressed()
             }
+
         }
 
         if (navigationIconVisibility) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (navigationIcon == null) {
                 toolbar?.navigationIcon = activity.getDrawable(R.drawable.ic_arrow_back_black_24dp)
+            } else {
+                toolbar?.navigationIcon = activity.getDrawable(navigationIcon)
             }
         } else {
             toolbar?.navigationIcon = null

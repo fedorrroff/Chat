@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.myapplication.mychats.MyChatsViewModel" />
+            type="com.example.myapplication.ui.mychats.MyChatsViewModel" />
     </data>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

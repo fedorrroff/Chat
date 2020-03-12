@@ -2,7 +2,7 @@ package com.example.myapplication.database
 
 import android.util.Log
 import androidx.fragment.app.Fragment
-import com.example.myapplication.chat.ChatFragment
+import com.example.myapplication.ui.chat.ChatFragment
 import com.example.myapplication.models.Message
 import com.google.firebase.database.*
 

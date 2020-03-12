@@ -2,10 +2,11 @@ package com.example.myapplication.di.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.chat.ChatViewModel
-import com.example.myapplication.login.LoginViewModel
-import com.example.myapplication.mychats.MyChatsViewModel
-import com.example.myapplication.signup.SignUpViewModel
+import com.example.myapplication.ui.chat.ChatViewModel
+import com.example.myapplication.ui.login.LoginViewModel
+import com.example.myapplication.ui.mychats.MyChatsViewModel
+import com.example.myapplication.ui.myprofile.ProfileViewModel
+import com.example.myapplication.ui.signup.SignUpViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -35,4 +36,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyChatsViewModel::class)
     abstract fun bindMyChatsViewModel(viewModel: MyChatsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel::class)
+    abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
 }

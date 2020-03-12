@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.myapplication.ui.myprofile.ProfileViewModel" />
+    </data>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_maximum_72"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/avatar_round_size"
+            android:layout_height="@dimen/avatar_round_size"
+            android:src="@drawable/avatar_default"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_maximum_72"
+        android:background="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/nameMyProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16"
+        android:textSize="32sp"
+        tools:text="NAME"
+        android:text="@={viewModel.name}"/>
+
+    <TextView
+        android:id="@+id/tagMyProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:layout_marginTop="@dimen/spacing_normal_16"
+        tools:text="TAG"
+        android:text="@={viewModel.tag}"/>
+
+</LinearLayout>
+</layout>

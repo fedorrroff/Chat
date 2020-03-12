@@ -5,43 +5,24 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.myapplication.chat.ChatViewModel" />
+            type="com.example.myapplication.ui.chat.ChatViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarChatSingle"
-        android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/chatToolbar"
-            style="@style/ThemeOverlay.AppCompat.ActionBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-            app:subtitleTextColor="#EEEEEE"
-            app:titleTextColor="#EEEEEE"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/holderView"
-        android:layout_marginTop="50dp"
-        app:layout_constraintLeft_toLeftOf="parent">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messageListRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
