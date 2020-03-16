@@ -77,29 +77,29 @@ class SignUpFragment: BaseFragment(), TextView.OnEditorActionListener {
         addListeners(view)
         (passwordEtSignup as EditText).setOnEditorActionListener(this)
 
-        view.rootView.setOnApplyWindowInsetsListener {v, insets ->
-            (activity as MainActivity).mainActivityRoot.setPaddingRelative(0, insets.systemWindowInsetTop, 0, 0)
-
-            val systemWindowInsets = with(insets) {
-                Rect(
-                    systemWindowInsetLeft,
-                    systemWindowInsetTop,
-                    systemWindowInsetRight,
-                    systemWindowInsetBottom
-                )
-            }
-
-            val keyboardHeight = systemWindowInsets.bottom
-            val navBarHeight = getNavBarHeight()
-            if (keyboardHeight > navBarHeight) {
-                onKeyboardVisible(keyboardHeight - navBarHeight)
-
-            } else {
-                onKeyboardHidden()
-            }
-
-            return@setOnApplyWindowInsetsListener  insets.consumeSystemWindowInsets()
-        }
+//        view.rootView.setOnApplyWindowInsetsListener {v, insets ->
+//            (activity as MainActivity).mainActivityRoot.setPaddingRelative(0, insets.systemWindowInsetTop, 0, 0)
+//
+//            val systemWindowInsets = with(insets) {
+//                Rect(
+//                    systemWindowInsetLeft,
+//                    systemWindowInsetTop,
+//                    systemWindowInsetRight,
+//                    systemWindowInsetBottom
+//                )
+//            }
+//
+//            val keyboardHeight = systemWindowInsets.bottom
+//            val navBarHeight = getNavBarHeight()
+//            if (keyboardHeight > navBarHeight) {
+//                onKeyboardVisible(keyboardHeight - navBarHeight)
+//
+//            } else {
+//                onKeyboardHidden()
+//            }
+//
+//            return@setOnApplyWindowInsetsListener  insets.consumeSystemWindowInsets()
+//        }
     }
 
     private fun addListeners(view: View) {
