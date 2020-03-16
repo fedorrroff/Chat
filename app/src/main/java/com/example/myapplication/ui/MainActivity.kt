@@ -1,9 +1,13 @@
 package com.example.myapplication.ui
 
+import android.graphics.Rect
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
+import androidx.core.view.ViewCompat
 import com.example.myapplication.R
 import com.example.myapplication.di.ActivityModule
 import com.example.myapplication.di.DaggerMainComponent
@@ -25,6 +29,7 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
 
     lateinit var navigation: Navigation
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT_WATCH)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -36,10 +41,27 @@ class MainActivity : AppCompatActivity(), IToolbarHolder {
 
         menuDelegate.onCreate(savedInstanceState)
 
+//        this.getRootView().setOnApplyWindowInsetsListener {v, insets ->
+//            appBarLayout?.setPaddingRelative(0, insets.systemWindowInsetTop , 0 , 0)
+//
+//            val systemWindowInsets = with(insets) {
+//                Rect(
+//                    systemWindowInsetLeft,
+//                    systemWindowInsetTop,
+//                    systemWindowInsetRight,
+//                    systemWindowInsetBottom
+//                )
+//            }
+//
+//            return@setOnApplyWindowInsetsListener  insets.consumeSystemWindowInsets()
+//        }
+//
         if(savedInstanceState == null) {
             navigation.showSplashScreen()
         }
     }
+
+    private fun getRootView() = findViewById<View>(R.id.mainActivityRoot)
 
     private fun getMainComponent() :
         MainComponent = DaggerMainComponent
