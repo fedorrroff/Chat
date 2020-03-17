@@ -9,4 +9,6 @@ interface IMessagingRepo {
     suspend fun getMessagesDB(chat: Chat, action: (msgs: MutableList<Message>) -> Unit): Resource<MutableList<Message>>
 
     suspend fun sendMessageDB(message: String)
+
+    fun markMessageAsRead(messageId: Int, chatId: String)
 }

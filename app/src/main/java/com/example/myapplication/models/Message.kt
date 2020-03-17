@@ -6,5 +6,6 @@ data class Message (
     val message: String = "",
     val senderId: String? = "",
     val senderName: String? = "",
-    val timestamp: Long = 0
+    val timestamp: Long = 0,
+    var isRead: Boolean = false
 ): Serializable

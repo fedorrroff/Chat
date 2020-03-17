@@ -74,4 +74,10 @@ class MessagingRepo @Inject constructor(
             ref.child("${chatId}/messages/${++msgId}").setValue(newMessage)
         }
     }
+
+    override fun markMessageAsRead(messageId: Int, chatId: String) {
+        val ref = firebaseDatabase.getReference("chats/${chatId}/messages")
+
+        ref.child("${messageId}/read").setValue(true)
+    }
 }

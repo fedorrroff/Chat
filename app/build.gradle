@@ -45,6 +45,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth:19.3.0'
 
+    implementation 'com.github.andremion:counterfab:1.2.2'
+
     implementation 'com.google.dagger:dagger:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.24'
 
