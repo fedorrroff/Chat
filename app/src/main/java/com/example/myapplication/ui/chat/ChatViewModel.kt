@@ -23,6 +23,7 @@ class ChatViewModel @Inject constructor(
     val messages = MutableLiveData<MutableList<Message>>()
 
     val scrollToBottomEvent = MutableLiveData<Event<Int>>()
+    val newMsgReceivedEvent = MutableLiveData<Event<Unit>>()
 
     val newMessage = ObservableField<String>()
 
@@ -44,6 +45,7 @@ class ChatViewModel @Inject constructor(
             messagingUseCase.getMessages(currentChat.value!!) {
                 messages.postValue(it)
                 messageCount = it.size
+                newMsgReceivedEvent.postValue(Event(Unit))
             }
         }
     }
@@ -59,6 +61,10 @@ class ChatViewModel @Inject constructor(
             newMessage.set("")
             scrollToBottomEvent.postValue(Event(messageCount))
         }
+    }
+
+    fun markMessageAsRead(messageId: Int) {
+        messagingUseCase.markMessageAsRead(messageId, currentChat.value!!.chatId)
     }
 
     fun onFABclicked() {

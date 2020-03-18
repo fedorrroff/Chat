@@ -44,7 +44,7 @@
         android:singleLine="true"
         android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/timeTvMyChats"
+        app:layout_constraintEnd_toStartOf="@id/unreadTvMyChats"
         app:layout_constraintStart_toStartOf="@id/nameMySchats"
         app:layout_constraintTop_toBottomOf="@id/nameMySchats"
         app:layout_constraintVertical_chainStyle="packed"
@@ -69,4 +69,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/unreadTvMyChats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:padding="2dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        tools:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,4 +70,16 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/messageSentIsRead"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/circle"
+        app:layout_constraintBottom_toBottomOf="@id/messageSentCL"
+        app:layout_constraintEnd_toStartOf="@id/messageSentCL"
+        app:layout_constraintTop_toTopOf="@id/messageSentCL"
+        app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

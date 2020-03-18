@@ -2,6 +2,8 @@ package com.example.myapplication.ui.chat.adapters
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,6 +46,13 @@ class ReceivedMessageAdapterDelegate :
             firstName
         }
 
+        holder.isReadImageView?.visibility =
+            if (item.isRead) {
+                GONE
+            } else {
+                VISIBLE
+            }
+
         holder.myAvatarImageView?.setImageBitmap(
             AvatarCreator.generateCircleBitmap(
                 holder.myAvatarImageView!!.context,
@@ -58,12 +67,14 @@ class ReceivedMessageAdapterDelegate :
         var sender: TextView? = null
         var messageTimeTextView: TextView? = null
         var myAvatarImageView: ImageView? = null
+        var isReadImageView: ImageView? = null
 
         init {
             messageTextView = itemView.findViewById(R.id.messageReceivedTextView)
             sender = itemView.findViewById(R.id.messageSenderMe)
             messageTimeTextView = itemView.findViewById(R.id.timeSentMyTV)
             myAvatarImageView = itemView.findViewById(R.id.avatarMyIvChat)
+            isReadImageView = itemView.findViewById(R.id.messageSentIsRead)
         }
     }
 }

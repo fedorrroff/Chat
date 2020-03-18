@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Ultra Secured</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="password_hint">Password</string>
+    <string name="login_hint">Login</string>
+    <string name="first_name_hint">First Name</string>
+    <string name="email_hint">Email</string>
+    <string name="last_name_optional_hint">Last Name (optional)</string>
 </resources>

@@ -11,13 +11,13 @@ class MessagingUseCase @Inject constructor(
     private val messagesRepo: IMessagingRepo
 ): IMessagingUseCase {
 
-    private val firebaseDatabase = FirebaseDatabase.getInstance()
-
     override suspend fun getMessages(chat: Chat, action: (msgs: MutableList<Message>) -> Unit): Resource<MutableList<Message>> = messagesRepo.getMessagesDB(chat, action)
 
     override suspend fun sendMessage(message: String) {
         messagesRepo.sendMessageDB(message)
     }
+
+    override fun markMessageAsRead(messageId: Int, chaId: String) = messagesRepo.markMessageAsRead(messageId, chaId)
 
     companion object {
         const val TAG = "MessagingUseCase"

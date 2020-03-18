@@ -6,4 +6,6 @@
     <dimen name="spacing_maximum_72">72dp</dimen>
 
     <dimen name="avatar_round_size">140dp</dimen>
+
+    <dimen name="image_logo">120dp</dimen>
 </resources>

@@ -48,4 +48,10 @@ class ChatAdapter : ListDelegationAdapter<MutableList<Message>> {
             notifyItemChanged(pos)
         }
     }
+
+    fun getUserUnreadMessagesCount(userId: String): Int =
+        items.count {
+            it.senderId != userId && !it.isRead
+        }
+
 }

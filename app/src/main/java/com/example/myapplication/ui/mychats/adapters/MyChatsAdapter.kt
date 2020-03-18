@@ -59,6 +59,15 @@ class MyChatsAdapter(
             initials.toUpperCase())
         )
 
+        val unread = getUserUnreadMessagesCount(FirebaseAuth.getInstance().currentUser?.uid!!, itemList[position])
+
+        holder.unread?.visibility = if (unread == 0) {
+            View.GONE
+        } else {
+            holder.unread?.text = unread.toString()
+            View.VISIBLE
+        }
+
         val time = DateUtils.messageTime(chatItem.messages.lastOrNull()!!.timestamp)
         holder.time?.text = time
     }
@@ -114,18 +123,25 @@ class MyChatsAdapter(
         }
     }
 
+    fun getUserUnreadMessagesCount(userId: String, chat: Chat): Int =
+        chat.messages.count { message ->
+                message.senderId != userId && !message.isRead
+        }
+
     inner class MyChatsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var name: TextView? = null
         var message: TextView? = null
         var avatar: ImageView? = null
         var time: TextView? = null
+        var unread: TextView? = null
 
         init {
             name = itemView.findViewById(R.id.nameMySchats)
             message = itemView.findViewById(R.id.messageMyChats)
             avatar = itemView.findViewById(R.id.avatarIvMyChats)
             time = itemView.findViewById(R.id.timeTvMyChats)
+            unread = itemView.findViewById(R.id.unreadTvMyChats)
         }
     }
 

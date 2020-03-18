@@ -14,6 +14,10 @@ fun View.makeVisible() {
     visibility = View.VISIBLE
 }
 
+fun View.makeInvisible() {
+    visibility = View.INVISIBLE
+}
+
 fun CurrentUser.toChatUser() = ChatUser(
     id = this.id!!,
     tag = this.tag!!,
