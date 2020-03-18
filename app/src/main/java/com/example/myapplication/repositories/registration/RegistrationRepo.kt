@@ -16,12 +16,16 @@ class RegistrationRepo @Inject constructor(
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
 
-    override suspend fun createAccount(email: String, password: String, name: String?) : Resource.Success<String> {
+    override suspend fun createAccount(email: String,
+                                       password: String,
+                                       tag: String?,
+                                       firstName: String,
+                                       lastName: String) : Resource.Success<String> {
         Log.d(SignUpFragment.TAG, "createAccount:$email")
 
         var code = ""
 
-        val isUnique = checkUserIdentity(name!!)
+        val isUnique = checkUserIdentity(tag!!)
 
         if (isUnique) {
             try {
@@ -31,9 +35,9 @@ class RegistrationRepo @Inject constructor(
                             // Sign in success, update UI with the signed-in user's information
                             val user = auth.currentUser
                             user?.updateProfile(UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
+                                .setDisplayName(tag)
                                 .build())
-                            addUserToDb(user!!.uid, name)
+                            addUserToDb(user!!.uid, tag, firstName, lastName)
                             code = CODE_SUCCESS
                         }
                     }.await()
@@ -60,7 +64,7 @@ class RegistrationRepo @Inject constructor(
 
         ref.children.forEach {
             val user = it.getValue(CurrentUser::class.java)
-            if (user?.name?.toLowerCase() == name.toLowerCase()) {
+            if (user?.tag?.toLowerCase() == name.toLowerCase()) {
                 return false
             }
         }
@@ -68,15 +72,15 @@ class RegistrationRepo @Inject constructor(
         return true
     }
 
-    private fun addUserToDb(uid: String, displayName: String?) {
+    private fun addUserToDb(uid: String, displayName: String?, firstName: String, lastName: String) {
         val ref = firebaseDatabase.getReference("users").child(uid)
-        val user = CurrentUser(id = uid, name = displayName, chats = listOf())
+        val user = CurrentUser(id = uid, tag = displayName, chats = listOf(), name = firstName, lastName = lastName)
         ref.setValue(user)
     }
 
     companion object {
         const val CODE_SUCCESS = "success"
-        const val CODE_NOT_UNIQUE_NAME = "not unique name"
+        const val CODE_NOT_UNIQUE_NAME = "not unique tag"
         const val CODE_NOT_UNIQE_EMAIL = "not unique email"
         const val CODE_WEEK_PASSWORD = "week password"
         const val CODE_INVALID_EMAIL_PATTERN = "invalid email pattern"

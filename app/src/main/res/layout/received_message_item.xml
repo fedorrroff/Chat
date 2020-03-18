@@ -1,31 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="right">
+    android:layout_gravity="end">
+
+    <ImageView
+        android:id="@+id/avatarMyIvChat"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/avatar_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/messageSenderMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:textSize="16sp"
-        tools:text="Me:"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <TextView
-        android:id="@+id/messageReceivedTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="end"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/my_message"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/avatarMyIvChat"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="my message"/>
+        tools:text="Me:" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/messageSentCL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/my_message"
+        app:layout_constraintEnd_toStartOf="@id/avatarMyIvChat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintTop_toBottomOf="@id/messageSenderMe"
+        app:layout_constraintHorizontal_bias="1.0">
+
+        <TextView
+            android:id="@+id/timeSentMyTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="#616161"
+            android:layout_gravity="bottom"
+            tools:text="1488:228" />
+
+        <TextView
+            android:id="@+id/messageReceivedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="start"
+            android:textColor="#424242"
+            android:textSize="40sp"
+            tools:text="dfrevrvvr" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

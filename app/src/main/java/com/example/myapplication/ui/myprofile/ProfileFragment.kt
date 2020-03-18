@@ -48,7 +48,7 @@ class ProfileFragment: BaseFragment() {
     }
 
     private fun setUpProfileInfo() {
-        viewModel.name.postValue(user.name)
+        viewModel.name.postValue(user.tag)
         viewModel.tag.postValue(user.id)
     }
 

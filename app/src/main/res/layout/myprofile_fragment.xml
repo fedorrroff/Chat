@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
@@ -12,25 +12,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout
+    <ImageView
+        android:id="@+id/header_cover_image"
         android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_background"
+        app:srcCompat="@drawable/profile_background" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="-130dp"
+        android:padding="20dp"
+
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar_default"/>
+
+    <TextView
+        android:id="@+id/firstNameProfile"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_maximum_72"
-        android:gravity="center_horizontal">
+        android:textSize="24sp"
+        tools:text="First Name"
+        android:layout_gravity="center"/>
 
-        <ImageView
-            android:layout_width="@dimen/avatar_round_size"
-            android:layout_height="@dimen/avatar_round_size"
-            android:src="@drawable/avatar_default"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/spacing_maximum_72"
-        android:background="@color/colorAccent"/>
+    <TextView
+        android:id="@+id/lastNameProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_marginTop="@dimen/spacing_normal_16"
+        tools:text="Last Name"
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/nameMyProfile"
@@ -45,7 +61,7 @@
         android:id="@+id/tagMyProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32sp"
+        android:textSize="24sp"
         android:layout_marginTop="@dimen/spacing_normal_16"
         tools:text="TAG"
         android:text="@={viewModel.tag}"/>

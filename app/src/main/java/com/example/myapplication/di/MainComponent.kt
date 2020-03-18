@@ -11,6 +11,7 @@ import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.ui.signup.SignUpFragment
 import com.example.myapplication.ui.splash.SplashFragment
 import com.example.myapplication.toolbar.MenuDelegate
+import com.example.myapplication.ui.mychats.MyChatsViewModel
 import dagger.Component
 
 @Component(modules = [ActivityModule::class, ViewModelModule::class, RepoModule::class])
@@ -37,4 +38,5 @@ interface MainComponent {
     fun inject(fragment: ProfileFragment)
 
     fun inject(fragment: SearchUserDialogFragment)
+
 }

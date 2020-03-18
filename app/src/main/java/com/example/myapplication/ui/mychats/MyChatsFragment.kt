@@ -2,6 +2,7 @@ package com.example.myapplication.ui.mychats
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.example.myapplication.databinding.MychatsFragmentBinding
 import com.example.myapplication.domain.Resource
 import com.example.myapplication.models.Chat
 import com.example.myapplication.models.CurrentUser
+import com.example.myapplication.navigation.Navigation
 import com.example.myapplication.ui.mychats.adapters.MyChatsAdapter
 import com.example.myapplication.utils.toChatUser
 import com.google.android.material.snackbar.Snackbar
@@ -49,10 +51,12 @@ class MyChatsFragment: BaseFragment() {
         binding.lifecycleOwner = this
         viewModel.bind(this)
 
+        viewModel.navigation = Navigation(requireActivity() as AppCompatActivity)
+
         setUpChatList()
         setUpCurrentUser()
 
-        addListeners(binding.root)
+        subscribeToEvents(binding.root)
 
         return binding.root
     }
@@ -82,7 +86,8 @@ class MyChatsFragment: BaseFragment() {
             viewModel.chats.observe(viewLifecycleOwner, Observer {
                 when(it) {
                     is Resource.Success -> {
-                        this.replaceItems(it.data)
+                        val sortedChats = it.data.sortedByDescending { chat -> chat.messages.lastOrNull()?.timestamp }
+                        this.replaceItems(sortedChats.toMutableList())
                     }
                     is Resource.Failure -> {
 
@@ -95,7 +100,7 @@ class MyChatsFragment: BaseFragment() {
         }
     }
 
-    private fun addListeners(view: View) {
+    private fun subscribeToEvents(view: View) {
         viewModel.showNoElementToastEvent.observe(viewLifecycleOwner, Observer {event ->
             event?.getContentIfNotHandledOrReturnNull()?.let {
                 Snackbar.make(view, it, Snackbar.LENGTH_LONG).apply {
@@ -118,6 +123,18 @@ class MyChatsFragment: BaseFragment() {
             event?.getContentIfNotHandledOrReturnNull()?.let {
                 val searchDialog = SearchUserDialogFragment()
                 searchDialog.show(childFragmentManager, TAG)
+            }
+        })
+
+        viewModel.pushChatToTopEvent.observe(viewLifecycleOwner, Observer { event ->
+            event?.getContentIfNotHandledOrReturnNull()?.let {
+                chatAdapter.pushChatToTop(it)
+            }
+        })
+
+        viewModel.updateSingleChatEvent.observe(viewLifecycleOwner, Observer { event ->
+            event?.getContentIfNotHandledOrReturnNull()?.let {
+                chatAdapter.update(it)
             }
         })
     }

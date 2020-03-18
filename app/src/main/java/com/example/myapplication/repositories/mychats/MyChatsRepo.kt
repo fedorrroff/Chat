@@ -5,7 +5,7 @@ import com.example.myapplication.models.Chat
 import com.example.myapplication.models.CurrentUser
 import com.example.myapplication.utils.getValue
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import javax.inject.Inject
 
 class MyChatsRepo @Inject constructor(
@@ -35,5 +35,36 @@ class MyChatsRepo @Inject constructor(
         }
 
         return Resource.Success(chats)
+    }
+
+    override suspend fun getChatById(chatId: String): Resource.Success<Chat?>{
+        val ref = firebaseDatabase.getReference("chats/${chatId}").getValue()
+
+        val chat = ref.getValue(Chat::class.java)
+
+        return Resource.Success(chat)
+    }
+
+    //перенести в интерфейс
+    override fun addNewMsgListener(action: (chatId: String?) -> Unit) {
+        val ref = firebaseDatabase.getReference("chats")
+
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                action(p0.key)
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+            }
+        })
     }
 }

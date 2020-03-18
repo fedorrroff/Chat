@@ -37,7 +37,7 @@ class SignUpUseCase @Inject constructor(
 
     private fun addUserToDb(uid: String, displayName: String?) {
         val ref = firebaseDatabase.getReference("users").child(uid)
-        val user = CurrentUser(id = uid, name = displayName, chats = listOf())
+        val user = CurrentUser(id = uid, tag = displayName, chats = listOf())
         ref.setValue(user)
     }
 }

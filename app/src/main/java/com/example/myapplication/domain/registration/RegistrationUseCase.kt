@@ -11,6 +11,8 @@ class RegistrationUseCase @Inject constructor(
     override suspend fun createAccount(
         email: String,
         password: String,
-        name: String?
-    ): Resource.Success<String> = registrationRepo.createAccount(email, password, name)
+        tag: String?,
+        firstName: String,
+        lastName: String
+    ): Resource.Success<String> = registrationRepo.createAccount(email, password, tag, firstName, lastName)
 }

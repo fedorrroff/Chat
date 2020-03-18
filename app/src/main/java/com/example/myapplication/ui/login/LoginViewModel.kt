@@ -6,13 +6,16 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.domain.login.LoginUseCase
+import com.example.myapplication.navigation.INavigation
 import com.example.myapplication.navigation.Navigation
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val navigator: Navigation,
+//    private val navigator: Navigation,
     val loginUseCase: LoginUseCase
 ): ViewModel(), LifecycleObserver {
+
+    lateinit var navigation: INavigation
 
     val email: ObservableField<String> = ObservableField("")
     val password: ObservableField<String> = ObservableField("")
@@ -33,6 +36,6 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onSignUpButtonClicked() {
-        navigator.showSignUpScreen()
+        navigation.showSignUpScreen()
     }
 }

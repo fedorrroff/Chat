@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.chat.adapters
 
-import com.example.myapplication.models.CurrentUser
+import android.view.View
+import com.example.myapplication.R
 import com.example.myapplication.models.Message
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
@@ -9,8 +10,6 @@ class ChatAdapter : ListDelegationAdapter<MutableList<Message>> {
 
     constructor() : super()
     constructor(delegatesManager: AdapterDelegatesManager<MutableList<Message>>) : super(delegatesManager)
-
-    private lateinit var currentUser: CurrentUser
 
     init {
         items = mutableListOf()
